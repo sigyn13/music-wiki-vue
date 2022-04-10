@@ -1,43 +1,52 @@
 <template>
   <div id="app">
-    <header class="header">
-      <div class="container">
-        <div class="header__wrap">
-          <img src="./assets/images/icon.svg">
-          <h1 class="header__title">Music Wiki Searcher</h1>
+    <scale-loader v-if="loading" :loading="loading" color="#3c3449"></scale-loader>
+    <div v-else>
+      <header class="header">
+        <div class="container">
+          <div class="header__wrap">
+            <img src="./assets/images/icon.svg">
+            <h1 class="header__title">Music Wiki</h1>
+          </div>
         </div>
-      </div>
-    </header>
-    <Main />
+      </header>
+      <router-view/>
+    </div>
   </div>
 </template>
 
 <script>
-import Main from './components/Main.vue';
-import LastFM from '../node_modules/last-fm';
+import ScaleLoader from 'vue-spinner/src/ScaleLoader.vue';
+import { mapGetters, mapActions } from 'vuex';
 
 export default {
   name: 'App',
   components: {
-    Main,
+    ScaleLoader,
   },
-  data() {
-    return {
-      dataTest: {},
-    };
+  computed: {
+    ...mapGetters(['loading', 'searchValue']),
   },
-  mounted() {
-    this.test();
+  watch: {
+    searchValue(v) {
+      this.setRoute(v);
+      this.getArtistData(v);
+    },
+    '$route.params.value': {
+      handler(value) {
+        if (value) {
+          this.getSearchValue(value);
+        }
+      },
+      deep: true,
+      immediate: true,
+    },
   },
-  computed: {},
   methods: {
-    test() {
-      const lastfm = new LastFM('4b9451697654bdc145a890d6f4fb5f7b', { userAgent: 'Music Wiki Searcher' });
-
-      lastfm.tagTopTags({}, (err, data) => {
-        if (err) console.error(err);
-        else this.dataTest = data;
-      });
+    ...mapActions(['getArtistData', 'getSearchValue']),
+    setRoute(nameValue) {
+      const path = `/${nameValue}`;
+      if (this.$route.path !== path) this.$router.push(path);
     },
   },
 };

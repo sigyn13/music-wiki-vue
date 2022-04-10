@@ -15,7 +15,7 @@ export default {
   name: 'MainInput',
   props: {
     label: {
-      type: String, default: 'Введите имя/название артиста',
+      type: String, default: '',
     },
   },
   methods: {
@@ -30,5 +30,16 @@ export default {
 .input {
   display: flex;
   flex-direction: column;
+  span {
+    margin-bottom: 20px;
+  }
+
+  &__field {
+    border: 1px solid #3c3449;
+    border-radius: 5px;
+    padding: 10px 5px;
+    color: #3c3449;
+    outline: none;
+  }
 }
 </style>
