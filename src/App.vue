@@ -25,25 +25,13 @@ export default {
     ScaleLoader,
   },
   computed: {
-    ...mapGetters(['loading', 'searchValue']),
+    ...mapGetters(['loading']),
   },
-  watch: {
-    searchValue(v) {
-      this.setRoute(v);
-      this.getArtistData(v);
-    },
-    '$route.params.value': {
-      handler(value) {
-        if (value) {
-          this.getSearchValue(value);
-        }
-      },
-      deep: true,
-      immediate: true,
-    },
+  mounted() {
+    this.$root.$on('setRoute', this.setRoute);
   },
   methods: {
-    ...mapActions(['getArtistData', 'getSearchValue']),
+    ...mapActions(['getArtistData']),
     setRoute(nameValue) {
       const path = `/${nameValue}`;
       if (this.$route.path !== path) this.$router.push(path);

@@ -14,7 +14,6 @@ export default new Vuex.Store({
       albums: {},
     },
     loading: false,
-    searchValue: '',
   },
   mutations: {
     setArtistData(state, data) {
@@ -28,9 +27,6 @@ export default new Vuex.Store({
     },
     loadingStatus(state, value) {
       state.loading = value;
-    },
-    setSearchValue(state, value) {
-      state.searchValue = value;
     },
   },
   actions: {
@@ -52,9 +48,6 @@ export default new Vuex.Store({
 
       commit('loadingStatus', false);
     },
-    getSearchValue({ commit }, value) {
-      commit('setSearchValue', value);
-    },
   },
   getters: {
     artistData(state) {
@@ -62,9 +55,6 @@ export default new Vuex.Store({
     },
     loading(state) {
       return state.loading;
-    },
-    searchValue(state) {
-      return state.searchValue;
     },
   },
   modules: {

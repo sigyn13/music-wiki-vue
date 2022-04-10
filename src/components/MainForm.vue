@@ -13,8 +13,6 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex';
-
 export default {
   name: 'MainForm',
   data() {
@@ -23,9 +21,8 @@ export default {
     };
   },
   methods: {
-    ...mapActions(['getSearchValue']),
     search() {
-      this.getSearchValue(this.inputValue);
+      this.$root.$emit('setRoute', this.inputValue);
     },
   },
 };
