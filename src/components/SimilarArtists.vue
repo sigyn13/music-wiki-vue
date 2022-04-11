@@ -61,7 +61,7 @@ export default {
       width: 100px;
       max-height: 100px;
       object-fit: cover;
-      border-radius: 50%;
+      // border-radius: 50%;
       transition: 0.6s;
       &:hover {
         -webkit-box-shadow: 0px 3px 37px -1px rgba(34, 60, 80, 0.2);
