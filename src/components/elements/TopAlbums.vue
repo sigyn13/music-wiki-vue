@@ -1,14 +1,21 @@
 <template>
   <div class="albums">
-    <h3 class="albums__title">{{title}}</h3>
+    <div class="albums__head" v-if="isArtistPage">
+      <v-icon
+        color="white"
+      >
+        mdi-album
+      </v-icon>
+      <h3 class="albums__title">{{title}}</h3>
+    </div>
     <div class="albums__wrap">
       <div
         class="albums__item"
-        v-for="(album, idx) in albums"
+        v-for="(album, idx) in sortedData"
         :key="`idx-${idx}`"
       >
-        <img v-if="album.images.length" :src="album.images[3]" alt="">
-        <img v-else src="../assets/images/404img.png" alt="">
+        <img v-if="isArtistPage" :src="album.images[3]" alt="">
+        <!-- <img v-if="isRating" :src="album.image[3].#text" alt=""> -->
         <h3>{{album.name}}</h3>
       </div>
     </div>
@@ -17,13 +24,21 @@
 
 <script>
 export default {
-  name: 'Albums',
+  name: 'TopAlbums',
   props: {
-    albums: {
+    data: {
       type: Array, default: () => [],
     },
     title: {
       type: String, default: '',
+    },
+    isArtistPage: {
+      type: Boolean, default: false,
+    },
+  },
+  computed: {
+    sortedData() {
+      return this.isArtistPage ? this.data.slice(0, 6) : this.data;
     },
   },
 };
@@ -32,9 +47,26 @@ export default {
 <style lang="scss">
 .albums {
 
-  &__title {
-    font-size: 24px;
+  &__head {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    background: var(--v-primary-base);
+    color: var(--v-white-base);
     margin: 0 0 20px;
+    padding: 12px 16px;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__title {
+    font-size: .875rem;
+    font-weight: 500;
+    letter-spacing: .0892857143em;
+    line-height: normal;
+    padding: 0 16px;
+    text-decoration: none;
+    text-transform: uppercase;
   }
 
   &__wrap {
@@ -63,13 +95,19 @@ export default {
       }
     }
     @media screen and (min-width: 1200px) {
-      max-width: 250px;
+      max-width: 200px;
+      margin-right: 10%;
+      margin-bottom: 30px;
+      &:nth-child(3), &:nth-child(6) {
+        margin-right: 0;
+      }
     }
 
     img {
       max-width: 100%;
       object-fit: contain;
       transition: .6s;
+      display: block;
       &:hover {
         transform: scale(1.1);
         -webkit-box-shadow: 0px 3px 37px -1px rgba(34, 60, 80, 0.2);

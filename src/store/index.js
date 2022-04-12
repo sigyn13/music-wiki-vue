@@ -13,37 +13,117 @@ export default new Vuex.Store({
       tracks: {},
       albums: {},
     },
+    tag: {
+      data: {},
+      artists: {},
+      tracks: {},
+      albums: {},
+      similar: {},
+    },
+    track: {
+      data: {},
+      tags: {},
+      similar: {},
+    },
     loading: false,
   },
   mutations: {
+    loadingStatus(state, value) {
+      state.loading = value;
+    },
     setArtistData(state, data) {
       state.artist.data = data;
     },
     setArtistTracks(state, data) {
-      state.artist.tracks = data.result.slice(0, 6);
+      state.artist.tracks = data.result;
     },
     setArtistAlbums(state, data) {
-      state.artist.albums = data.result.slice(0, 6);
+      state.artist.albums = data.result;
     },
-    loadingStatus(state, value) {
-      state.loading = value;
+    setTagData(state, data) {
+      state.tag.data = data;
+    },
+    setTagArtists(state, data) {
+      state.tag.artists = data;
+    },
+    setTagAlbums(state, data) {
+      state.tag.albums = data;
+    },
+    setTagSimilar(state, data) {
+      state.tag.similar = data;
+    },
+    setTagTracks(state, data) {
+      state.tag.tracks = data;
+    },
+    setTrackData(state, data) {
+      state.track.data = data;
+    },
+    setTrackSimilar(state, data) {
+      state.track.similar = data;
+    },
+    setTrackTags(state, data) {
+      state.track.tags = data;
     },
   },
   actions: {
-    getArtistData({ commit }, nameValue) {
+    getArtistData({ commit }, value) {
       commit('loadingStatus', true);
 
-      lastfm.artistInfo({ name: nameValue }, (err, data) => {
+      lastfm.artistInfo({ name: value }, (err, data) => {
         if (err) console.error(err);
         else commit('setArtistData', data);
       });
-      lastfm.artistTopTracks({ name: nameValue }, (err, data) => {
+      lastfm.artistTopTracks({ name: value }, (err, data) => {
         if (err) console.error(err);
         else commit('setArtistTracks', data);
       });
-      lastfm.artistTopAlbums({ name: nameValue }, (err, data) => {
+      lastfm.artistTopAlbums({ name: value }, (err, data) => {
         if (err) console.error(err);
         else commit('setArtistAlbums', data);
+      });
+
+      commit('loadingStatus', false);
+    },
+    getTagData({ commit }, value) {
+      commit('loadingStatus', true);
+
+      lastfm.tagInfo({ tag: value }, (err, data) => {
+        if (err) console.error(err);
+        else commit('setTagData', data);
+      });
+      lastfm.tagTopArtists({ tag: value }, (err, data) => {
+        if (err) console.error(err);
+        else commit('setTagArtists', data);
+      });
+      lastfm.tagTopAlbums({ tag: value }, (err, data) => {
+        if (err) console.error(err);
+        else commit('setTagAlbums', data);
+      });
+      lastfm.tagTopTracks({ tag: value }, (err, data) => {
+        if (err) console.error(err);
+        else commit('setTagTracks', data);
+      });
+      lastfm.tagSimilar({ tag: value }, (err, data) => {
+        if (err) console.error(err);
+        else commit('setTagSimilar', data);
+      });
+
+      commit('loadingStatus', false);
+    },
+    getTrackData({ commit }, value) {
+      commit('loadingStatus', true);
+
+      lastfm.trackInfo({ track: value }, (err, data) => {
+        if (err) console.error(err);
+        else commit('setTrackData', data);
+      });
+      lastfm.trackTopTags({ track: value }, (err, data) => {
+        if (err) console.error(err);
+        else commit('setTrackTags', data);
+      });
+      lastfm.trackSimilar({ track: value }, (err, data) => {
+        if (err) console.error(err);
+        else commit('setTrackSimilar', data);
       });
 
       commit('loadingStatus', false);
@@ -55,6 +135,12 @@ export default new Vuex.Store({
     },
     loading(state) {
       return state.loading;
+    },
+    tagData(state) {
+      return state.tag;
+    },
+    trackData(state) {
+      return state.track;
     },
   },
   modules: {

@@ -6,7 +6,7 @@
         <h3 class="content__title">{{artist.name}}</h3>
       </div>
       <div class="content__head-wrap">
-        <p class="content__bio">
+        <p class="content__text">
           <span>Bio: </span>
           {{artist.summary.substring(0, 1000)}}
           <a class="content__link" :href="`${artist.url}/+wiki`" target="_blank">
@@ -14,46 +14,29 @@
           </a>
         </p>
       </div>
-      <Tags :tags="artist.tags" />
+      <Tags-chips :data="artist.tags" />
     </div>
     <div class="content__body">
       <div class="content__left-col">
-        <Tracks :tracks="artistData.tracks" title="Top tracks" />
-        <Similar-artists :similars="artist.similar" title="Similar artists" />
+        <TopTracks :data="artistData.tracks" title="Top tracks" :isArtistPage="true"/>
+        <TopArtists :data="artist.similar" title="Similar artists" :isArtistPage="true" />
       </div>
       <div class="content__right-col">
-        <Albums :albums="artistData.albums" title="Top albums" />
+        <TopAlbums :data="artistData.albums" title="Top albums" :isArtistPage="true" />
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex';
+import { mapGetters } from 'vuex';
 
 export default {
-  name: 'Content',
+  name: 'ArtistDisplay',
   computed: {
     ...mapGetters(['artistData']),
     artist() {
       return this.artistData.data;
-    },
-  },
-  watch: {
-    '$route.params.value': {
-      handler(value) {
-        if (value) {
-          this.getArtistData(value);
-        }
-      },
-      deep: true,
-      immediate: true,
-    },
-  },
-  methods: {
-    ...mapActions(['getArtistData']),
-    search(value) {
-      this.$root.$emit('setRoute', value);
     },
   },
 };
@@ -79,9 +62,9 @@ export default {
     }
   }
 
-  &__bio {
+  &__text {
     margin: 0;
-    font-size: 22px;
+    font-size: 18px;
     span {
       font-weight: bold;
     }
@@ -117,12 +100,12 @@ export default {
   &__left-col {
     display: flex;
     flex-direction: column;
-    width: 35%;
+    width: 28%;
     margin-right: 35px;
   }
 
   &__right-col {
-    width: 60%;
+    width: 65%;
     display: flex;
     flex-direction: column;
   }

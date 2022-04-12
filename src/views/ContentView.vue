@@ -1,16 +1,48 @@
 <template>
-  <div class="about">
-    <Content />
-  </div>
+  <component v-bind:is="currentDataType"></component>
 </template>
 
 <script>
-export default {
-  data() {
-    return {
-      contentViewValue: this.$route.params.value,
-    };
-  },
+import { mapActions } from 'vuex';
 
+export default {
+  name: 'ContentView',
+  data() {
+    return {};
+  },
+  watch: {
+    '$route.params': {
+      handler(data) {
+        this.scrollToTop();
+        if (data) {
+          if (data.type === 'artist') {
+            this.getArtistData(data.value);
+          }
+          if (data.type === 'tag') {
+            this.getTagData(data.value);
+          }
+          if (data.type === 'track') {
+            this.getTrackData(data.value);
+          }
+        }
+      },
+      deep: true,
+      immediate: true,
+    },
+  },
+  computed: {
+    currentDataType() {
+      return `${this.$route.params.type}Display`;
+    },
+  },
+  methods: {
+    ...mapActions(['getArtistData', 'getTagData', 'getTrackData']),
+    scrollToTop() {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth',
+      });
+    },
+  },
 };
 </script>

@@ -11,7 +11,7 @@ const routes = [
     component: Home,
   },
   {
-    path: '/:value',
+    path: '/:type/:value',
     name: 'ContentView',
     component: () => import(/* webpackChunkName: "ContentView" */ '../views/ContentView.vue'),
   },
