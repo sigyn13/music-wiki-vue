@@ -26,6 +26,7 @@ export default new Vuex.Store({
       similar: {},
     },
     loading: false,
+    displayState: null,
   },
   mutations: {
     loadingStatus(state, value) {
@@ -64,10 +65,14 @@ export default new Vuex.Store({
     setTrackTags(state, data) {
       state.track.tags = data;
     },
+    setDisplayState(state, value) {
+      state.displayState = value;
+    },
   },
   actions: {
     getArtistData({ commit }, value) {
       commit('loadingStatus', true);
+      commit('setDisplayState', 'artist');
 
       lastfm.artistInfo({ name: value }, (err, data) => {
         if (err) console.error(err);
@@ -86,6 +91,7 @@ export default new Vuex.Store({
     },
     getTagData({ commit }, value) {
       commit('loadingStatus', true);
+      commit('setDisplayState', 'tag');
 
       lastfm.tagInfo({ tag: value }, (err, data) => {
         if (err) console.error(err);
@@ -112,6 +118,7 @@ export default new Vuex.Store({
     },
     getTrackData({ commit }, value) {
       commit('loadingStatus', true);
+      commit('setDisplayState', 'track');
 
       lastfm.trackInfo({ track: value }, (err, data) => {
         if (err) console.error(err);

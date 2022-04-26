@@ -13,7 +13,6 @@ export default {
   watch: {
     '$route.params': {
       handler(data) {
-        this.scrollToTop();
         if (data) {
           if (data.type === 'artist') {
             this.getArtistData(data.value);

@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import VueSecureHTML from 'vue-html-secure';
+import SpotifyWebApi from 'spotify-web-api-js';
 import App from './App.vue';
 import store from './store';
 import 'normalize.css';
@@ -11,6 +12,13 @@ import '@babel/polyfill';
 Vue.config.productionTip = false;
 Vue.use(VueSecureHTML);
 Vue.prototype.$safeHTML = VueSecureHTML.safeHTML;
+
+const spotifyApi = new SpotifyWebApi();
+
+spotifyApi.getArtistAlbums('43ZHCT0cAZBISjO8DG9PnE', (err, data) => {
+  if (err) console.error(err);
+  else console.log('Artist albums', data);
+});
 
 const files = require.context('./', true, /\.vue$/i);
 files.keys().map((key) => Vue.component(
